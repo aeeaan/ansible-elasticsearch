@@ -1,2 +1,21 @@
 ---
-# tasks file for elasticsearch
+- name: install elasticsearch key
+  rpm_key: key=https://packages.elasticsearch.org/GPG-KEY-elasticsearch state=present
+  when: ansible_os_family == 'RedHat'
+
+- name: install elasticsearch repo
+  template: src=elasticsearch.repo.j2 dest=/etc/yum.repos.d/elasticsearch.repo owner=root group=root mode=0644
+  when: ansible_os_family == 'RedHat'
+
+- name: install elasticsearch dependencies
+  yum: name={{ item }} state=installed
+  with_items:
+    - java-1.7.0-openjdk
+
+- name: install elasticsearch
+  yum: name=elasticsearch state=installed
+  when: ansible_os_family == 'RedHat'
+
+- name: ensure elasticsearch is running
+  service: name=elasticsearch state=started enabled=yes
+  when: ansible_os_family == 'RedHat'
