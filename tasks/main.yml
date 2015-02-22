@@ -16,6 +16,14 @@
   yum: name=elasticsearch state=installed
   when: ansible_os_family == 'RedHat'
 
+- name: configure elasticsearch
+  template: src="{{ item }}.j2" dest="/etc/elasticsearch/{{ item }}"
+  with_items:
+    - elasticsearch.yml
+    - logging.yml
+  notify: restart elasticsearch
+  when: ansible_os_family == 'RedHat'
+
 - name: ensure elasticsearch is running
   service: name=elasticsearch state=started enabled=yes
   when: ansible_os_family == 'RedHat'
