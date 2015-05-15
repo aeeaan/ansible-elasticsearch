@@ -5,7 +5,6 @@
 
 - name: install elasticsearch repo
   template: src=elasticsearch.repo.j2 dest=/etc/yum.repos.d/elasticsearch.repo owner=root group=root mode=0644
-  when: ansible_os_family == 'RedHat'
 
 - name: install elasticsearch dependencies
   yum: name={{ item }} state=installed
@@ -14,7 +13,6 @@
 
 - name: install elasticsearch
   yum: name=elasticsearch state=installed
-  when: ansible_os_family == 'RedHat'
 
 - name: configure elasticsearch
   template: src="{{ item }}.j2" dest="/etc/elasticsearch/{{ item }}"
@@ -22,8 +20,6 @@
     - elasticsearch.yml
     - logging.yml
   notify: restart elasticsearch
-  when: ansible_os_family == 'RedHat'
 
 - name: ensure elasticsearch is running
   service: name=elasticsearch state=started enabled=yes
-  when: ansible_os_family == 'RedHat'
