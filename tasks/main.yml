@@ -14,7 +14,7 @@
     - packages
 
 - name: install elasticsearch dependencies
-  yum: name={{ item }} state=installed
+  yum: name={{ item }} state=present
   with_items:
     - java-1.7.0-openjdk
   tags:
@@ -22,7 +22,7 @@
     - packages
 
 - name: install elasticsearch
-  yum: name=elasticsearch state=installed
+  yum: name=elasticsearch state=present
   tags:
     - elasticsearch
     - packages
